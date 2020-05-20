@@ -11,5 +11,5 @@ public class Address {
     private long id;
 
     @Column(name = "full_address")
-    private String full_address;
+    private String fullAddress;
 }
