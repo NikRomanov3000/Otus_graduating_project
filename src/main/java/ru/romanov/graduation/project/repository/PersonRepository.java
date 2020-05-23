@@ -6,5 +6,5 @@ import ru.romanov.graduation.project.model.Person;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
-    Person findByPersonName (String personName);
+
 }

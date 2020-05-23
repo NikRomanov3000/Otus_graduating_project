@@ -2,12 +2,13 @@ package ru.romanov.graduation.project.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="receipt")
 public class Receipt {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
@@ -22,6 +23,13 @@ public class Receipt {
 
     @Column(name="r_address_id")
     private Address address;
+
+    @OneToMany(targetEntity = Payment.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "receipt")
+    private List<Payment> paymentsToReceipt;
+
+    @OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
+    @JoinColumn(name="r_address_id")
+    private Address addressOfDebtor;
 
     public long getId() {
         return id;

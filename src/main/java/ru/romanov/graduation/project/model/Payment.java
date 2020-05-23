@@ -1,5 +1,6 @@
 package ru.romanov.graduation.project.model;
 
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 @Table(name="payment")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     long id;
 

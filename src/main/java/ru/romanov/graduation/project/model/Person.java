@@ -1,12 +1,15 @@
 package ru.romanov.graduation.project.model;
 
+
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="person")
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
@@ -18,6 +21,9 @@ public class Person {
 
     @Column(name = "passport_number")
     private short passportNumber;
+
+    @OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "person")
+    private Set<Address> personAddresses;
 
     public long getId() {
         return id;
