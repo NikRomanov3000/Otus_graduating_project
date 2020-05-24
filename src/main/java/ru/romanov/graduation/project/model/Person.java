@@ -17,10 +17,10 @@ public class Person {
     private String personName;
 
     @Column(name = "passport_serial")
-    private short passportSerial;
+    private int passportSerial;
 
     @Column(name = "passport_number")
-    private short passportNumber;
+    private int passportNumber;
 
     @OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "person")
     private Set<Address> personAddresses;
@@ -37,7 +37,7 @@ public class Person {
         this.personName = personName;
     }
 
-    public short getPassportSerial() {
+    public int getPassportSerial() {
         return passportSerial;
     }
 
@@ -45,7 +45,7 @@ public class Person {
         this.passportSerial = passportSerial;
     }
 
-    public short getPassportNumber() {
+    public int getPassportNumber() {
         return passportNumber;
     }
 
