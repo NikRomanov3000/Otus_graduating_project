@@ -14,7 +14,7 @@ public class Address {
     private String fullAddress;
 
     @ManyToOne(targetEntity = Person.class, cascade = CascadeType.ALL)
-    @JoinColumn(name="person_id", nullable=false)
+    @JoinColumn(name = "r_person_id", nullable = false)
     private Person person;
 
     @OneToOne(mappedBy = "address")
@@ -30,5 +30,21 @@ public class Address {
 
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Receipt getReceiptToAddress() {
+        return receiptToAddress;
+    }
+
+    public void setReceiptToAddress(Receipt receiptToAddress) {
+        this.receiptToAddress = receiptToAddress;
     }
 }

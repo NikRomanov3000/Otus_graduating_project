@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="receipt")
+@Table(name = "receipt")
 public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,18 +18,12 @@ public class Receipt {
     @Column(name = "dispatch_dt")
     private Date dispatchDate;
 
-    @Column(name="r_person_id")
-    private Person person;
-
-    @Column(name="r_address_id")
-    private Address address;
-
-    @OneToMany(targetEntity = Payment.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "receipt")
+    @OneToMany(targetEntity = Payment.class, cascade = CascadeType.ALL, mappedBy = "receipt")
     private List<Payment> paymentsToReceipt;
 
     @OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
-    @JoinColumn(name="r_address_id")
-    private Address addressOfDebtor;
+    @JoinColumn(name = "r_address_id")
+    private Address address;
 
     public long getId() {
         return id;
@@ -51,11 +45,20 @@ public class Receipt {
         this.dispatchDate = dispatchDate;
     }
 
-    public Person getPerson() {
-        return person;
+    public List<Payment> getPaymentsToReceipt() {
+        return paymentsToReceipt;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setPaymentsToReceipt(List<Payment> paymentsToReceipt) {
+        this.paymentsToReceipt = paymentsToReceipt;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address addressOfDebtor) {
+        this.address = addressOfDebtor;
     }
 }
+
