@@ -30,10 +30,11 @@ public class PersonController {
         return personService.getPeronById(id);
     }
 
+
     @RequestMapping(value = "/person", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    boolean savePerson(Person person) {
+    boolean savePerson(@RequestBody Person person) {
         try {
             personService.addPerson(person);
         } catch (Exception ex) {
