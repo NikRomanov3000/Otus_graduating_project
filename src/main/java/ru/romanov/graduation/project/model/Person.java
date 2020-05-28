@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
+
 
 @Entity
 @Table(name = "person")
@@ -24,16 +25,15 @@ public class Person {
     private int passportSerial;
 
     @Column(name = "passport_number")
-   @JsonProperty("passportNumber")
+    @JsonProperty("passportNumber")
     private int passportNumber;
 
-    @OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "person")
+    @OneToMany(targetEntity = Address.class, mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<Address> personAddresses;
+    private List<Address> personAddresses;
 
 
     public Person() {
-
     }
 
     public Long getId() {
@@ -43,6 +43,7 @@ public class Person {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getPersonName() {
         return personName;
     }
@@ -67,11 +68,11 @@ public class Person {
         this.passportNumber = passportNumber;
     }
 
-    public Set<Address> getPersonAddresses() {
+    public List<Address> getPersonAddresses() {
         return personAddresses;
     }
 
-    public void setPersonAddresses(Set<Address> personAddresses) {
+    public void setPersonAddresses(List<Address> personAddresses) {
         this.personAddresses = personAddresses;
     }
 

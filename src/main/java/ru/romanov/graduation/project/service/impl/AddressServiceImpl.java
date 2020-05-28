@@ -18,6 +18,7 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
+
     @Override
     public List<Address> getAllAddress() {
         return addressRepository.findAll();

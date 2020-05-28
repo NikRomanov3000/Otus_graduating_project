@@ -5,17 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
-
 @Entity
 @Table(name = "address")
-public class Address {
+public class Address{
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id")
     private Long id;
 
     @Column(name = "full_address")
-  //  @JsonProperty("fullAddress")
+    @JsonProperty("fullAddress")
     private String fullAddress;
 
     @ManyToOne(targetEntity = Person.class, cascade = CascadeType.ALL)
@@ -34,10 +33,6 @@ public class Address {
     public Address() {
     }
 
-    public Address(String fullAddress) {
-        this.fullAddress = fullAddress;
-    }
-
     public Long getId() {
         return id;
     }
@@ -50,22 +45,27 @@ public class Address {
         return fullAddress;
     }
 
+    public Address(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
     }
 
     public Person getPerson() { return person;}
 
-    public void setPerson(Person person) { this.person = person;}
+    public void setPerson(Person person) { this.person = person; }
 
     public void setReceiptToAddress(Receipt receiptToAddress) {
         this.receiptToAddress = receiptToAddress;
     }
-    public Receipt getReceiptToAddress() { return receiptToAddress;}
+
+    public Receipt getReceiptToAddress() { return receiptToAddress; }
 
     public Long getRefPersonId() { return refPersonId; }
 
-    public void setRefPersonId(Long refPersonId) { this.refPersonId = refPersonId;}
+    public void setRefPersonId(Long refPersonId) { this.refPersonId = refPersonId; }
 }
 
 

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.romanov.graduation.project.model.Address;
 import ru.romanov.graduation.project.service.AddressService;
+import ru.romanov.graduation.project.service.PersonService;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,8 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
+    @Autowired
+    private PersonService personService;
     @RequestMapping(value = "/address", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -37,6 +40,7 @@ public class AddressController {
     public @ResponseBody
     boolean savePerson(@RequestBody Address address) throws Exception {
         try {
+            address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
            addressService.addAddress(address);
         } catch (Exception ex) {
             throw new Exception(ex);
