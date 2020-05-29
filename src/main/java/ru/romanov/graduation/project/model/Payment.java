@@ -1,6 +1,9 @@
 package ru.romanov.graduation.project.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,23 +11,36 @@ import java.util.Date;
 @Table(name="payment")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @JsonProperty("id")
     @Column(name = "id")
-    long id;
+    private long id;
 
     @Column(name = "amount")
-    int amount;
+    @JsonProperty("amount")
+    private int amount;
 
     @Column(name = "payment_date")
-    Date paymentDate;
+    @JsonProperty("paymentDate")
+    private Date paymentDate;
 
-    @ManyToOne(targetEntity = Receipt.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Receipt.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "r_receipt_id")
-    Receipt receipt;
+    @JsonIgnore
+    private Receipt receipt;
+
+    @Column(name = "r_receipt_id", updatable = false, insertable = false)
+    @JsonProperty("receiptId")
+    private Long refReceiptId;
+
+    public Payment() {
+    }
 
     public long getId() {
         return id;
     }
+
+    public void setId(long id) { this.id = id;}
 
     public int getAmount() {
         return amount;
@@ -49,4 +65,8 @@ public class Payment {
     public void setReceipt(Receipt receipt) {
         this.receipt = receipt;
     }
+
+    public Long getRefReceiptId() { return refReceiptId;}
+
+    public void setRefReceiptId(Long refReceiptId) { this.refReceiptId = refReceiptId;}
 }

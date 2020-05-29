@@ -40,13 +40,4 @@ public class ReceiptServiceImpl implements ReceiptService {
         receiptRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public void updateReceipt(Receipt receipt, long receiptId) {
-        Optional<Receipt> someReceipt = receiptRepository.findById(receiptId);
-        if (!someReceipt.isEmpty()) {
-            receiptRepository.deleteById(receiptId);
-        }
-        receiptRepository.save(receipt);
-    }
 }

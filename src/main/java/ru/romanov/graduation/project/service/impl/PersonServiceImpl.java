@@ -37,14 +37,4 @@ public class PersonServiceImpl implements PersonService {
     public void removePersonById(long id) {
         personRepository.deleteById(id);
     }
-
-    @Override
-    @Transactional
-    public void updatePerson(Person person, long personId) {
-        Optional<Person> somePerson = personRepository.findById(personId);
-        if (!somePerson.isEmpty()) {
-            personRepository.deleteById(personId);
-        }
-        personRepository.save(person);
-    }
 }

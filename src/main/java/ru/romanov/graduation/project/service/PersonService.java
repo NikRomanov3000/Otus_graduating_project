@@ -10,7 +10,4 @@ public interface PersonService {
     Optional<Person> getPeronById(long id);
     void addPerson(Person person);
     void removePersonById(long id);
-    void updatePerson(Person person, long personId);
-
-
 }

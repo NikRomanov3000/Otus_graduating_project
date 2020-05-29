@@ -39,14 +39,4 @@ public class PaymentServiceImpl implements PaymentService {
     public void removePaymentById(long id) {
         paymentRepository.deleteById(id);
     }
-
-    @Override
-    @Transactional
-    public void updatePayment(Payment payment, long paymentId) {
-        Optional<Payment> somePayment = paymentRepository.findById(paymentId);
-        if (!somePayment.isEmpty()) {
-            paymentRepository.deleteById(paymentId);
-        }
-        paymentRepository.save(payment);
-    }
 }

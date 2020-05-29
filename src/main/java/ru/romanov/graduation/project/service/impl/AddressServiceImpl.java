@@ -40,14 +40,4 @@ public class AddressServiceImpl implements AddressService {
     public void removeAddressById(long id) {
         addressRepository.deleteById(id);
     }
-
-    @Override
-    @Transactional
-    public void updateAddress(Address address, long addressId) {
-        Optional<Address> someAddress = addressRepository.findById(addressId);
-        if (!someAddress.isEmpty()) {
-            addressRepository.deleteById(addressId);
-        }
-        addressRepository.save(address);
-    }
 }

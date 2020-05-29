@@ -10,5 +10,4 @@ public interface ReceiptService {
     Optional<Receipt> getReceiptById(long id);
     void addReceipt(Receipt receipt);
     void removeReceiptById(long id);
-    void updateReceipt(Receipt receipt, long receiptId);
 }

@@ -9,5 +9,4 @@ public interface AddressService {
     Optional<Address> getAddressById(long id);
     void addAddress(Address address);
     void removeAddressById(long id);
-    void updateAddress(Address address, long addressId);
 }

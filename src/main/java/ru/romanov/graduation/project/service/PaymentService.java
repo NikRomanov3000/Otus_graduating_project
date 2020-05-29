@@ -11,6 +11,4 @@ public interface PaymentService {
     Optional<Payment> getPaymentById(long id);
     void addPayment(Payment payment);
     void removePaymentById(long id);
-    void updatePayment(Payment payment, long paymentId);
-
 }

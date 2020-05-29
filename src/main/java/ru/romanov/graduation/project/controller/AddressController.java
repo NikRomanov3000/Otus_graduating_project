@@ -20,27 +20,24 @@ public class AddressController {
 
     @Autowired
     private PersonService personService;
-    @RequestMapping(value = "/address", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @GetMapping({"/address"})
     public @ResponseBody
     List<Address> getAllAddress() {
         return addressService.getAllAddress();
     }
 
-    @RequestMapping(value = "/address/{addressId}", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping({"/address/{addressId}"})
     public @ResponseBody
     Optional<Address> getAddressById(@PathVariable(value = "addressId") Long id) {
         return addressService.getAddressById(id);
     }
 
-
-    @RequestMapping(value = "/address", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping({"/address"})
     public @ResponseBody
     boolean savePerson(@RequestBody Address address) throws Exception {
         try {
-            address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
+           address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
            addressService.addAddress(address);
         } catch (Exception ex) {
             throw new Exception(ex);
@@ -49,8 +46,7 @@ public class AddressController {
         return true;
     }
 
-    @RequestMapping(value = "/address/{addressId}", method = RequestMethod.DELETE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping({"/address/{addressId}"})
     public @ResponseBody
     boolean deleteAddressById(@PathVariable(value = "addressId") Long id) {
         try {
