@@ -1,8 +1,10 @@
 package ru.romanov.graduation.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.web.bind.annotation.*;
 import ru.romanov.graduation.project.model.Payment;
+import ru.romanov.graduation.project.model.Receipt;
 import ru.romanov.graduation.project.service.PaymentService;
 import ru.romanov.graduation.project.service.ReceiptService;
 
@@ -34,8 +36,10 @@ public class PaymentController {
     public @ResponseBody
     boolean savePerson(@RequestBody Payment payment) throws Exception {
         try {
-            payment.setReceipt(receiptService.getReceiptById(payment.getRefReceiptId()).get());
+            Receipt receipt = receiptService.getReceiptById(payment.getRefReceiptId()).get();
+            payment.setReceipt(receipt);
             paymentService.addPayment(payment);
+            updateReceipt(receipt, payment.getAmount(), false);
         } catch (Exception ex) {
             throw new Exception(ex);
         }
@@ -46,10 +50,40 @@ public class PaymentController {
     public @ResponseBody
     boolean deleteAddressById(@PathVariable(value = "paymentId") Long id) throws Exception {
         try {
-            receiptService.removeReceiptById(id);
+            Payment payment = paymentService.getPaymentById(id).get();
+            updateReceipt(payment.getReceipt(), payment.getAmount(), true);
+            paymentService.removePaymentById(id);
         } catch (Exception ex) {
             throw new Exception(ex);
         }
         return true;
+    }
+
+    private void updateReceipt(Receipt receipt, int paymentSum, boolean isDeleted) {
+        if (!isDeleted) {
+            if (paymentSum > 0) {
+                if (receipt.getActiveAmount() > 0) {
+                    receipt.setActiveAmount(receipt.getActiveAmount() - paymentSum);
+                }
+            }
+        } else {
+            receipt.setActiveAmount(receipt.getActiveAmount() + paymentSum);
+        }
+        checkAndUpdateReceipt(receipt);
+
+        receiptService.addReceipt(receipt);
+    }
+
+    private void checkAndUpdateReceipt(Receipt receipt) {
+        if (receipt.getActiveAmount() < receipt.getDebtAmount() && receipt.getActiveAmount() > 0) {
+            receipt.setReceiptStatus(2);
+        }
+        if (receipt.getActiveAmount() <= 0) {
+            receipt.setReceiptStatus(3);
+        }
+        if(receipt.getActiveAmount()>=receipt.getDebtAmount())
+        {
+            receipt.setReceiptStatus(1);
+        }
     }
 }

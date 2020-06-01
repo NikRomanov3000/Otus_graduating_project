@@ -24,6 +24,22 @@ public class Receipt {
     @JsonProperty("dispatchDate")
     private Date dispatchDate;
 
+    /**
+     * @author Romanov Nikita (boss of this project)
+     * 1 - не оплачено (платёж не поступал)
+     * 2 - часьтчено оплачено
+     * 3 - оплачена полностью
+     */
+
+    @Column(name = "receipt_status")
+    @JsonProperty("receiptStatus")
+    private int receiptStatus;
+
+    @Column(name = "active_amount")
+    @JsonProperty("activeAmount")
+    private int activeAmount;
+
+
     @OneToMany(targetEntity = Payment.class, fetch = FetchType.LAZY, mappedBy = "receipt")
     @JsonIgnore
     private List<Payment> paymentsToReceipt;
@@ -44,7 +60,9 @@ public class Receipt {
         return id;
     }
 
-    public void setId(long id) { this.id = id;}
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public int getDebtAmount() {
         return debtAmount;
@@ -70,6 +88,22 @@ public class Receipt {
         this.paymentsToReceipt = paymentsToReceipt;
     }
 
+    public int getReceiptStatus() {
+        return receiptStatus;
+    }
+
+    public void setReceiptStatus(int receiptStatus) {
+        this.receiptStatus = receiptStatus;
+    }
+
+    public int getActiveAmount() {
+        return activeAmount;
+    }
+
+    public void setActiveAmount(int activeAmount) {
+        this.activeAmount = activeAmount;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -78,8 +112,13 @@ public class Receipt {
         this.address = addressOfDebtor;
     }
 
-    public Long getRefAddressId() { return refAddressId;}
+    public Long getRefAddressId() {
+        return refAddressId;
+    }
 
-    public void setRefAddressId(Long refAddressId) { this.refAddressId = refAddressId;}
+    public void setRefAddressId(Long refAddressId) {
+        this.refAddressId = refAddressId;
+    }
+
 }
 
