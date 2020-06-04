@@ -1,6 +1,5 @@
 package ru.romanov.graduation.project.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +14,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ReceiptServiceImpl implements ReceiptService {
 
-    @Autowired
-    private ReceiptRepository receiptRepository;
+    private final ReceiptRepository receiptRepository;
+
+    public ReceiptServiceImpl(ReceiptRepository receiptRepository) {
+        this.receiptRepository = receiptRepository;
+    }
 
     @Override
     public List<Receipt> getAllReceipt() {

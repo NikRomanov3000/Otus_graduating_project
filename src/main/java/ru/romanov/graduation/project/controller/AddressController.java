@@ -1,8 +1,5 @@
 package ru.romanov.graduation.project.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.romanov.graduation.project.model.Address;
 import ru.romanov.graduation.project.service.AddressService;
@@ -15,30 +12,29 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class AddressController {
 
-    @Autowired
-    private AddressService addressService;
+    private final AddressService addressService;
+    private final PersonService personService;
 
-    @Autowired
-    private PersonService personService;
+    public AddressController(AddressService addressService, PersonService personService) {
+        this.addressService = addressService;
+        this.personService = personService;
+    }
 
     @GetMapping({"/address"})
-    public @ResponseBody
-    List<Address> getAllAddress() {
+    public List<Address> getAllAddress() {
         return addressService.getAllAddress();
     }
 
     @GetMapping({"/address/{addressId}"})
-    public @ResponseBody
-    Optional<Address> getAddressById(@PathVariable(value = "addressId") Long id) {
+    public Optional<Address> getAddressById(@PathVariable(value = "addressId") Long id) {
         return addressService.getAddressById(id);
     }
 
     @PostMapping({"/address"})
-    public @ResponseBody
-    boolean savePerson(@RequestBody Address address) throws Exception {
+    public boolean savePerson(@RequestBody Address address) throws Exception {
         try {
-           address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
-           addressService.addAddress(address);
+            address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
+            addressService.addAddress(address);
         } catch (Exception ex) {
             throw new Exception(ex);
 
@@ -47,8 +43,7 @@ public class AddressController {
     }
 
     @DeleteMapping({"/address/{addressId}"})
-    public @ResponseBody
-    boolean deleteAddressById(@PathVariable(value = "addressId") Long id) {
+    public boolean deleteAddressById(@PathVariable(value = "addressId") Long id) {
         try {
             addressService.removeAddressById(id);
         } catch (Exception ex) {

@@ -1,7 +1,5 @@
 package ru.romanov.graduation.project.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.web.bind.annotation.*;
 import ru.romanov.graduation.project.model.Payment;
 import ru.romanov.graduation.project.model.Receipt;
@@ -14,27 +12,27 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class PaymentController {
-    @Autowired
-    private PaymentService paymentService;
 
-    @Autowired
+    private PaymentService paymentService;
     private ReceiptService receiptService;
 
+    public PaymentController(PaymentService paymentService, ReceiptService receiptService) {
+        this.paymentService = paymentService;
+        this.receiptService = receiptService;
+    }
+
     @GetMapping({"/payment"})
-    public @ResponseBody
-    List<Payment> getAllAddress() {
+    public List<Payment> getAllAddress() {
         return paymentService.getAllPayment();
     }
 
     @GetMapping({"/payment/{paymentId}"})
-    public @ResponseBody
-    Optional<Payment> getAddressById(@PathVariable(value = "paymentId") Long id) {
+    public Optional<Payment> getAddressById(@PathVariable(value = "paymentId") Long id) {
         return paymentService.getPaymentById(id);
     }
 
     @PostMapping({"/payment"})
-    public @ResponseBody
-    boolean savePerson(@RequestBody Payment payment) throws Exception {
+    public boolean savePerson(@RequestBody Payment payment) throws Exception {
         try {
             Receipt receipt = receiptService.getReceiptById(payment.getRefReceiptId()).get();
             payment.setReceipt(receipt);
@@ -47,8 +45,7 @@ public class PaymentController {
     }
 
     @DeleteMapping({"/payment/{paymentId}"})
-    public @ResponseBody
-    boolean deleteAddressById(@PathVariable(value = "paymentId") Long id) throws Exception {
+    public boolean deleteAddressById(@PathVariable(value = "paymentId") Long id) throws Exception {
         try {
             Payment payment = paymentService.getPaymentById(id).get();
             updateReceipt(payment.getReceipt(), payment.getAmount(), true);
@@ -81,8 +78,7 @@ public class PaymentController {
         if (receipt.getActiveAmount() <= 0) {
             receipt.setReceiptStatus(3);
         }
-        if(receipt.getActiveAmount()>=receipt.getDebtAmount())
-        {
+        if (receipt.getActiveAmount() >= receipt.getDebtAmount()) {
             receipt.setReceiptStatus(1);
         }
     }

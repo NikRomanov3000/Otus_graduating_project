@@ -1,6 +1,5 @@
 package ru.romanov.graduation.project.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.romanov.graduation.project.model.Person;
@@ -13,8 +12,12 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class PersonServiceImpl implements PersonService {
-    @Autowired
-    private PersonRepository personRepository;
+
+    private final PersonRepository personRepository;
+
+    public PersonServiceImpl(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Override
     public List<Person> getAllPerson() {
@@ -28,8 +31,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    public void addPerson(Person person) {
-        personRepository.save(person);
+    public Person addPerson(Person person) {
+        return personRepository.save(person);
     }
 
     @Override
