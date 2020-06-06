@@ -31,15 +31,19 @@ public class AddressController {
     }
 
     @PostMapping({"/address"})
-    public boolean savePerson(@RequestBody Address address) throws Exception {
+    public Long saveAddress(@RequestBody Address address) throws Exception {
+        Long retId = null;
         try {
-            address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
-            addressService.addAddress(address);
+            if(personService.getPeronById(address.getRefPersonId()).isEmpty()){
+                throw new RuntimeException("Person with id: "+address.getRefPersonId()+" not found");
+            }else {
+                address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
+                retId = addressService.addAddress(address).getId();
+            }
         } catch (Exception ex) {
             throw new Exception(ex);
-
         }
-        return true;
+        return retId;
     }
 
     @DeleteMapping({"/address/{addressId}"})

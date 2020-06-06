@@ -1,6 +1,5 @@
 package ru.romanov.graduation.project.controller;
 
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.romanov.graduation.project.model.Person;
 import ru.romanov.graduation.project.service.PersonService;

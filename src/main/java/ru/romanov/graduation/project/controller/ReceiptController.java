@@ -20,28 +20,29 @@ public class ReceiptController {
     }
 
     @GetMapping({"/receipt"})
-    public List<Receipt> getAllAddress() {
+    public List<Receipt> getAllReceipt() {
         return receiptService.getAllReceipt();
     }
 
     @GetMapping({"/receipt/{receiptId}"})
-    public Optional<Receipt> getAddressById(@PathVariable(value = "receiptId") Long id) {
+    public Optional<Receipt> getReceiptById(@PathVariable(value = "receiptId") Long id) {
         return receiptService.getReceiptById(id);
     }
 
     @PostMapping({"/receipt"})
-    public boolean savePerson(@RequestBody Receipt receipt) throws Exception {
+    public Long saveReceipt(@RequestBody Receipt receipt) throws Exception {
+        Long retId = null;
         try {
             receipt.setAddress(addressService.getAddressById(receipt.getRefAddressId()).get());
-            receiptService.addReceipt(receipt);
+            retId = receiptService.addReceipt(receipt).getId();
         } catch (Exception ex) {
             throw new Exception(ex);
         }
-        return true;
+        return retId;
     }
 
     @DeleteMapping({"/receipt/{receiptId}"})
-    public boolean deleteAddressById(@PathVariable(value = "receiptId") Long id) throws Exception {
+    public boolean deleteReceiptById(@PathVariable(value = "receiptId") Long id) throws Exception {
         try {
             receiptService.removeReceiptById(id);
         } catch (Exception ex) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -22,7 +23,7 @@ public class Payment {
 
     @Column(name = "payment_date")
     @JsonProperty("paymentDate")
-    private Date paymentDate;
+    private LocalDate paymentDate;
 
     @ManyToOne(targetEntity = Receipt.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "r_receipt_id")
@@ -34,6 +35,7 @@ public class Payment {
     private Long refReceiptId;
 
     public Payment() {
+        paymentDate = LocalDate.now();
     }
 
     public long getId() {
@@ -50,11 +52,11 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Date getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Date paymentDate) {
+    public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 

@@ -7,6 +7,6 @@ import java.util.Optional;
 public interface AddressService {
     List<Address> getAllAddress();
     Optional<Address> getAddressById(long id);
-    void addAddress(Address address);
+    Address addAddress(Address address);
     void removeAddressById(long id);
 }

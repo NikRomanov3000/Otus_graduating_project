@@ -22,64 +22,42 @@ public class PaymentController {
     }
 
     @GetMapping({"/payment"})
-    public List<Payment> getAllAddress() {
+    public List<Payment> getAllPayments() {
         return paymentService.getAllPayment();
     }
 
     @GetMapping({"/payment/{paymentId}"})
-    public Optional<Payment> getAddressById(@PathVariable(value = "paymentId") Long id) {
+    public Optional<Payment> getPaymentById(@PathVariable(value = "paymentId") Long id) {
         return paymentService.getPaymentById(id);
     }
 
     @PostMapping({"/payment"})
-    public boolean savePerson(@RequestBody Payment payment) throws Exception {
+    public Long savePayment(@RequestBody Payment payment) throws Exception {
+        Long retId = null;
         try {
-            Receipt receipt = receiptService.getReceiptById(payment.getRefReceiptId()).get();
-            payment.setReceipt(receipt);
-            paymentService.addPayment(payment);
-            updateReceipt(receipt, payment.getAmount(), false);
+            if(receiptService.getReceiptById(payment.getRefReceiptId()).isEmpty()){
+                throw new RuntimeException("Receipt with id: "+payment.getRefReceiptId()+" not found");
+            } else{
+                Receipt receipt = receiptService.getReceiptById(payment.getRefReceiptId()).get();
+                payment.setReceipt(receipt);
+                retId = paymentService.addPayment(payment).getId();
+                receiptService.updateReceipt(receipt, payment.getAmount(), false);
+            }
         } catch (Exception ex) {
             throw new Exception(ex);
         }
-        return true;
+        return retId;
     }
 
     @DeleteMapping({"/payment/{paymentId}"})
-    public boolean deleteAddressById(@PathVariable(value = "paymentId") Long id) throws Exception {
+    public boolean deletePaymentById(@PathVariable(value = "paymentId") Long id) throws Exception {
         try {
             Payment payment = paymentService.getPaymentById(id).get();
-            updateReceipt(payment.getReceipt(), payment.getAmount(), true);
+            receiptService.updateReceipt(payment.getReceipt(), payment.getAmount(), true);
             paymentService.removePaymentById(id);
         } catch (Exception ex) {
             throw new Exception(ex);
         }
         return true;
-    }
-
-    private void updateReceipt(Receipt receipt, int paymentSum, boolean isDeleted) {
-        if (!isDeleted) {
-            if (paymentSum > 0) {
-                if (receipt.getActiveAmount() > 0) {
-                    receipt.setActiveAmount(receipt.getActiveAmount() - paymentSum);
-                }
-            }
-        } else {
-            receipt.setActiveAmount(receipt.getActiveAmount() + paymentSum);
-        }
-        checkAndUpdateReceipt(receipt);
-
-        receiptService.addReceipt(receipt);
-    }
-
-    private void checkAndUpdateReceipt(Receipt receipt) {
-        if (receipt.getActiveAmount() < receipt.getDebtAmount() && receipt.getActiveAmount() > 0) {
-            receipt.setReceiptStatus(2);
-        }
-        if (receipt.getActiveAmount() <= 0) {
-            receipt.setReceiptStatus(3);
-        }
-        if (receipt.getActiveAmount() >= receipt.getDebtAmount()) {
-            receipt.setReceiptStatus(1);
-        }
     }
 }

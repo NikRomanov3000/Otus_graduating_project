@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.romanov.graduation.project.model.Receipt;
+import ru.romanov.graduation.project.model.enems.ReceiptStatuses;
 import ru.romanov.graduation.project.repository.ReceiptRepository;
 import ru.romanov.graduation.project.service.ReceiptService;
 
@@ -32,8 +33,8 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     @Transactional
-    public void addReceipt(Receipt receipt) {
-        receiptRepository.save(receipt);
+    public Receipt addReceipt(Receipt receipt) {
+        return receiptRepository.save(receipt);
     }
 
     @Override
@@ -42,4 +43,31 @@ public class ReceiptServiceImpl implements ReceiptService {
         receiptRepository.deleteById(id);
     }
 
+    @Override
+    public void updateReceipt(Receipt receipt, int paymentSum, boolean isDeleted) {
+        if (!isDeleted) {
+            if (paymentSum > 0) {
+                if (receipt.getActiveAmount() > 0) {
+                    receipt.setActiveAmount(receipt.getActiveAmount() - paymentSum);
+                }
+            }
+        } else {
+            receipt.setActiveAmount(receipt.getActiveAmount() + paymentSum);
+        }
+        checkAndUpdateReceipt(receipt);
+        addReceipt(receipt);
+    }
+
+    @Override
+    public void checkAndUpdateReceipt(Receipt receipt) {
+        if (receipt.getActiveAmount() < receipt.getDebtAmount() && receipt.getActiveAmount() > 0) {
+            receipt.setReceiptStatus(ReceiptStatuses.partPaid.getReceiptStatusValue());
+        }
+        if (receipt.getActiveAmount() <= 0) {
+            receipt.setReceiptStatus(ReceiptStatuses.fullPaid.getReceiptStatusValue());
+        }
+        if (receipt.getActiveAmount() >= receipt.getDebtAmount()) {
+            receipt.setReceiptStatus(ReceiptStatuses.notPaid.getReceiptStatusValue());
+        }
+    }
 }

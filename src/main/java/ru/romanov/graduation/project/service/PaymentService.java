@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface PaymentService {
     List<Payment> getAllPayment();
     Optional<Payment> getPaymentById(long id);
-    void addPayment(Payment payment);
+    Payment addPayment(Payment payment);
     void removePaymentById(long id);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Receipt {
 
     @Column(name = "dispatch_dt")
     @JsonProperty("dispatchDate")
-    private Date dispatchDate;
+    private LocalDate dispatchDate;
 
     /**
      * @author Romanov Nikita (boss of this project)
@@ -54,6 +55,7 @@ public class Receipt {
     private Long refAddressId;
 
     public Receipt() {
+        dispatchDate = LocalDate.now();
     }
 
     public long getId() {
@@ -72,13 +74,11 @@ public class Receipt {
         this.debtAmount = debtAmount;
     }
 
-    public Date getDispatchDate() {
+    public LocalDate getDispatchDate() {
         return dispatchDate;
     }
 
-    public void setDispatchDate(Date dispatchDate) {
-        this.dispatchDate = dispatchDate;
-    }
+    public void setDispatchDate(LocalDate dispatchDate) { this.dispatchDate = dispatchDate; }
 
     public List<Payment> getPaymentsToReceipt() {
         return paymentsToReceipt;

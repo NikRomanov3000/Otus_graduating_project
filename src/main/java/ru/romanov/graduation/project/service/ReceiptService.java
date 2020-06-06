@@ -8,6 +8,9 @@ import java.util.Optional;
 public interface ReceiptService {
     List<Receipt> getAllReceipt();
     Optional<Receipt> getReceiptById(long id);
-    void addReceipt(Receipt receipt);
+    Receipt addReceipt(Receipt receipt);
     void removeReceiptById(long id);
+    void updateReceipt(Receipt receipt, int paymentSum, boolean isDeleted);
+    void checkAndUpdateReceipt(Receipt receipt);
+
 }

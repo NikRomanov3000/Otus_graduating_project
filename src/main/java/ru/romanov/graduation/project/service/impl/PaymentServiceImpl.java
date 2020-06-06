@@ -32,8 +32,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void addPayment(Payment payment) {
-        paymentRepository.save(payment);
+    public Payment addPayment(Payment payment) {
+        return paymentRepository.save(payment);
     }
 
     @Override
