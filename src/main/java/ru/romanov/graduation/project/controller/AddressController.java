@@ -1,6 +1,8 @@
 package ru.romanov.graduation.project.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.romanov.graduation.project.model.Address;
 import ru.romanov.graduation.project.service.AddressService;
 import ru.romanov.graduation.project.service.PersonService;
@@ -35,7 +37,7 @@ public class AddressController {
         Long retId = null;
         try {
             if(personService.getPeronById(address.getRefPersonId()).isEmpty()){
-                throw new RuntimeException("Person with id: "+address.getRefPersonId()+" not found");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person with id: "+address.getRefPersonId()+" doesn't exist");
             }else {
                 address.setPerson(personService.getPeronById(address.getRefPersonId()).get());
                 retId = addressService.addAddress(address).getId();

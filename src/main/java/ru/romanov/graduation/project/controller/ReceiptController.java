@@ -1,6 +1,8 @@
 package ru.romanov.graduation.project.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.romanov.graduation.project.model.Receipt;
 import ru.romanov.graduation.project.service.AddressService;
 import ru.romanov.graduation.project.service.ReceiptService;
@@ -33,8 +35,12 @@ public class ReceiptController {
     public Long saveReceipt(@RequestBody Receipt receipt) throws Exception {
         Long retId = null;
         try {
-            receipt.setAddress(addressService.getAddressById(receipt.getRefAddressId()).get());
-            retId = receiptService.addReceipt(receipt).getId();
+            if(addressService.getAddressById(receipt.getRefAddressId()).isEmpty()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address with id: "+receipt.getRefAddressId()+" doesn't exist");
+            } else {
+                receipt.setAddress(addressService.getAddressById(receipt.getRefAddressId()).get());
+                retId = receiptService.addReceipt(receipt).getId();
+            }
         } catch (Exception ex) {
             throw new Exception(ex);
         }

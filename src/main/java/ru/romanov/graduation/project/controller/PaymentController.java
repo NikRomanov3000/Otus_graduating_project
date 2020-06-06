@@ -1,6 +1,8 @@
 package ru.romanov.graduation.project.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.romanov.graduation.project.model.Payment;
 import ru.romanov.graduation.project.model.Receipt;
 import ru.romanov.graduation.project.service.PaymentService;
@@ -35,13 +37,13 @@ public class PaymentController {
     public Long savePayment(@RequestBody Payment payment) throws Exception {
         Long retId = null;
         try {
-            if(receiptService.getReceiptById(payment.getRefReceiptId()).isEmpty()){
-                throw new RuntimeException("Receipt with id: "+payment.getRefReceiptId()+" not found");
-            } else{
+            if (receiptService.getReceiptById(payment.getRefReceiptId()).isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receipt with id: " + payment.getRefReceiptId() + " doesn't exist");
+            } else {
                 Receipt receipt = receiptService.getReceiptById(payment.getRefReceiptId()).get();
+                receiptService.updateReceipt(receipt, payment.getAmount(), false);
                 payment.setReceipt(receipt);
                 retId = paymentService.addPayment(payment).getId();
-                receiptService.updateReceipt(receipt, payment.getAmount(), false);
             }
         } catch (Exception ex) {
             throw new Exception(ex);
