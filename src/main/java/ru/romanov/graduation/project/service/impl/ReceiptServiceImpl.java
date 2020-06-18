@@ -1,10 +1,10 @@
 package ru.romanov.graduation.project.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.romanov.graduation.project.model.Receipt;
+import ru.romanov.graduation.project.model.enem.ReceiptStatuses;
 import ru.romanov.graduation.project.repository.ReceiptRepository;
 import ru.romanov.graduation.project.service.ReceiptService;
 
@@ -15,8 +15,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ReceiptServiceImpl implements ReceiptService {
 
-    @Autowired
-    private ReceiptRepository receiptRepository;
+    private final ReceiptRepository receiptRepository;
+
+    public ReceiptServiceImpl(ReceiptRepository receiptRepository) {
+        this.receiptRepository = receiptRepository;
+    }
 
     @Override
     public List<Receipt> getAllReceipt() {
@@ -30,8 +33,8 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     @Transactional
-    public void addReceipt(Receipt receipt) {
-        receiptRepository.save(receipt);
+    public Receipt addReceipt(Receipt receipt) {
+        return receiptRepository.save(receipt);
     }
 
     @Override
@@ -41,12 +44,30 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    @Transactional
-    public void updateReceipt(Receipt receipt, long receiptId) {
-        Optional<Receipt> someReceipt = receiptRepository.findById(receiptId);
-        if (!someReceipt.isEmpty()) {
-            receiptRepository.deleteById(receiptId);
+    public void updateReceipt(Receipt receipt, int paymentSum, boolean isDeleted) {
+        if (!isDeleted) {
+            if (paymentSum > 0) {
+                if (receipt.getActiveAmount() > 0) {
+                    receipt.setActiveAmount(receipt.getActiveAmount() - paymentSum);
+                }
+            }
+        } else {
+            receipt.setActiveAmount(receipt.getActiveAmount() + paymentSum);
         }
-        receiptRepository.save(receipt);
+        checkAndUpdateReceipt(receipt);
+        addReceipt(receipt);
+    }
+
+    @Override
+    public void checkAndUpdateReceipt(Receipt receipt) {
+        if (receipt.getActiveAmount() < receipt.getDebtAmount() && receipt.getActiveAmount() > 0) {
+            receipt.setReceiptStatus(ReceiptStatuses.partPaid.getReceiptStatusValue());
+        }
+        if (receipt.getActiveAmount() <= 0) {
+            receipt.setReceiptStatus(ReceiptStatuses.fullPaid.getReceiptStatusValue());
+        }
+        if (receipt.getActiveAmount() >= receipt.getDebtAmount()) {
+            receipt.setReceiptStatus(ReceiptStatuses.notPaid.getReceiptStatusValue());
+        }
     }
 }

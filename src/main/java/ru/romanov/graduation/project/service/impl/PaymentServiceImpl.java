@@ -1,6 +1,5 @@
 package ru.romanov.graduation.project.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.romanov.graduation.project.model.Payment;
@@ -15,8 +14,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
+
+    public PaymentServiceImpl(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
 
     @Override
     public List<Payment> getAllPayment() {
@@ -30,23 +32,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void addPayment(Payment payment) {
-        paymentRepository.save(payment);
+    public Payment addPayment(Payment payment) {
+        return paymentRepository.save(payment);
     }
 
     @Override
     @Transactional
     public void removePaymentById(long id) {
         paymentRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void updatePayment(Payment payment, long paymentId) {
-        Optional<Payment> somePayment = paymentRepository.findById(paymentId);
-        if (!somePayment.isEmpty()) {
-            paymentRepository.deleteById(paymentId);
-        }
-        paymentRepository.save(payment);
     }
 }

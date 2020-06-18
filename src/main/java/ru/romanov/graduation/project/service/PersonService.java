@@ -8,9 +8,6 @@ import java.util.Optional;
 public interface PersonService {
     List<Person> getAllPerson();
     Optional<Person> getPeronById(long id);
-    void addPerson(Person person);
+    Person addPerson(Person person);
     void removePersonById(long id);
-    void updatePerson(Person person, long personId);
-
-
 }

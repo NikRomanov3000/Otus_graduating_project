@@ -1,6 +1,5 @@
 package ru.romanov.graduation.project.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.romanov.graduation.project.model.Address;
@@ -14,8 +13,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AddressServiceImpl implements AddressService {
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+
+    public AddressServiceImpl(AddressRepository addressRepository) {
+        this.addressRepository = addressRepository;
+    }
 
     @Override
     public List<Address> getAllAddress() {
@@ -29,23 +31,13 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public void addAddress(Address address) {
-        addressRepository.save(address);
+    public Address addAddress(Address address) {
+        return addressRepository.save(address);
     }
 
     @Override
     @Transactional
     public void removeAddressById(long id) {
         addressRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void updateAddress(Address address, long addressId) {
-        Optional<Address> someAddress = addressRepository.findById(addressId);
-        if (!someAddress.isEmpty()) {
-            addressRepository.deleteById(addressId);
-        }
-        addressRepository.save(address);
     }
 }
