@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.romanov.graduation.project.model.Receipt;
-import ru.romanov.graduation.project.model.enems.ReceiptStatuses;
+import ru.romanov.graduation.project.model.enem.ReceiptStatuses;
 import ru.romanov.graduation.project.repository.ReceiptRepository;
 import ru.romanov.graduation.project.service.ReceiptService;
 

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,7 +25,7 @@ public class Receipt {
     private LocalDate dispatchDate;
 
     /**
-     * @author Romanov Nikita (boss of this project)
+     * @author Romanov Nikita
      * 1 - не оплачено (платёж не поступал)
      * 2 - часьтчено оплачено
      * 3 - оплачена полностью

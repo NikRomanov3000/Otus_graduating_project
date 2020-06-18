@@ -1,4 +1,4 @@
-package ru.romanov.graduation.project.model.enems;
+package ru.romanov.graduation.project.model.enem;
 
 public enum ReceiptStatuses {
     notPaid(1),
