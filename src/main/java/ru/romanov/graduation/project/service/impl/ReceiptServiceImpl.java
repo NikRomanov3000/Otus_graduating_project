@@ -1,12 +1,15 @@
 package ru.romanov.graduation.project.service.impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.romanov.graduation.project.model.Receipt;
-import ru.romanov.graduation.project.model.enem.ReceiptStatuses;
+import org.springframework.web.server.ResponseStatusException;
 import ru.romanov.graduation.project.repository.ReceiptRepository;
 import ru.romanov.graduation.project.service.ReceiptService;
+import ru.romanov.otus.model.PaymentInfo;
+import ru.romanov.otus.model.Receipt;
+import ru.romanov.otus.model.enums.ReceiptStatuses;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,18 +47,32 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public void updateReceipt(Receipt receipt, int paymentSum, boolean isDeleted) {
-        if (!isDeleted) {
-            if (paymentSum > 0) {
-                if (receipt.getActiveAmount() > 0) {
-                    receipt.setActiveAmount(receipt.getActiveAmount() - paymentSum);
+    @Transactional
+    public void updateReceipt(PaymentInfo paymentInfo) throws Exception {
+       Optional<Receipt> receiptOptional = receiptRepository.findById(paymentInfo.getReceiptId());
+        Receipt receiptForUpdate;
+        try{
+            if(receiptOptional.isEmpty()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receipt with id: "+paymentInfo.getReceiptId()+" doesn't exist");
+            } else {
+                receiptForUpdate = receiptOptional.get();
+            }
+        } catch (Exception ex){
+            throw new Exception(ex);
+        }
+
+        if (!paymentInfo.isDeleted()) {
+            if (paymentInfo.getAmount() > 0) {
+                if (receiptForUpdate.getActiveAmount() > 0) {
+                    receiptForUpdate.setActiveAmount(receiptForUpdate.getActiveAmount() - paymentInfo.getAmount());
                 }
             }
         } else {
-            receipt.setActiveAmount(receipt.getActiveAmount() + paymentSum);
+            receiptForUpdate.setActiveAmount(receiptForUpdate.getActiveAmount() + paymentInfo.getAmount());
         }
-        checkAndUpdateReceipt(receipt);
-        addReceipt(receipt);
+
+        checkAndUpdateReceipt(receiptForUpdate);
+        addReceipt(receiptForUpdate);
     }
 
     @Override
