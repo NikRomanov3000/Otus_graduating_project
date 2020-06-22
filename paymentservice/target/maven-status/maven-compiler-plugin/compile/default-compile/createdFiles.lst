@@ -1,7 +1,0 @@
-project\service\PaymentService.class
-project\config\CorsConfig.class
-project\service\PaymentServiceImpl.class
-project\config\CorsConfig$1.class
-project\repository\PaymentRepository.class
-project\controller\PaymentController.class
-project\Application.class
