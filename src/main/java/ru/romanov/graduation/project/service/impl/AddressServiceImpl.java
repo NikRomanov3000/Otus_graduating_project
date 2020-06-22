@@ -2,9 +2,9 @@ package ru.romanov.graduation.project.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.romanov.graduation.project.model.Address;
 import ru.romanov.graduation.project.repository.AddressRepository;
 import ru.romanov.graduation.project.service.AddressService;
+import ru.romanov.otus.model.Address;
 
 import java.util.List;
 import java.util.Optional;

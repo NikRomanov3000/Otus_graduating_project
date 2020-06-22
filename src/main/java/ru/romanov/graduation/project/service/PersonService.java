@@ -1,6 +1,7 @@
 package ru.romanov.graduation.project.service;
 
-import ru.romanov.graduation.project.model.Person;
+
+import ru.romanov.otus.model.Person;
 
 import java.util.List;
 import java.util.Optional;
