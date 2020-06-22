@@ -3,7 +3,7 @@
 
 Подключение:
 1) Собрать Jar-ник
-2)В консоли прописать mvn install:install-file -Dfile=<Пусть к архиву> -DgroupId=models -DartifactId=models -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+2) В консоли прописать mvn install:install-file -Dfile=<Пусть к архиву> -DgroupId=models -DartifactId=models -Dversion=1.0-SNAPSHOT -Dpackaging=jar
 3) Проверить наличие в pom.xml зависимост:
 <dependency>
 			<groupId>models</groupId>
