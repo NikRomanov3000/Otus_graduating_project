@@ -1,11 +1,13 @@
 package project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
 import project.service.PaymentService;
@@ -22,11 +24,12 @@ import java.util.Optional;
 @ComponentScan("ru.romanov")
 public class PaymentController {
 
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
+    private final AmqpTemplate templateForMessage;
 
-
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, AmqpTemplate templateForMessage) {
         this.paymentService = paymentService;
+        this.templateForMessage = templateForMessage;
     }
 
     @GetMapping({"/payment"})
@@ -46,7 +49,7 @@ public class PaymentController {
             retId = paymentService.addPayment(payment).getId();
 
             PaymentInfo paymentInfo = new PaymentInfo(payment.getRefReceiptId(), payment.getAmount(), false);
-            sendPaymentInformation(paymentInfo);
+            sendPaymentInformationByREST(paymentInfo);
         } catch (Exception ex) {
             throw new Exception(ex);
         }
@@ -58,7 +61,7 @@ public class PaymentController {
         try {
             Payment payment = paymentService.getPaymentById(id).get();
             PaymentInfo paymentInfo = new PaymentInfo(payment.getRefReceiptId(), payment.getAmount(), true);
-            sendPaymentInformation(paymentInfo);
+            sendPaymentInformationByREST(paymentInfo);
 
             paymentService.removePaymentById(id);
         } catch (Exception ex) {
@@ -67,7 +70,7 @@ public class PaymentController {
         return true;
     }
 
-    private void sendPaymentInformation(PaymentInfo paymentInfo) throws IOException {
+    private void sendPaymentInformationByREST(PaymentInfo paymentInfo) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         String serviceUri = "http://localhost:8080";
         HttpPut putRequestForUpdate = new HttpPut(serviceUri + "/api/receipt/" + paymentInfo.getReceiptId());
@@ -78,5 +81,11 @@ public class PaymentController {
 
 
         CloseableHttpResponse response = httpclient.execute(putRequestForUpdate);
+    }
+
+    private void sendPaymentInformationByRabbitMQ(PaymentInfo paymentInfo) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String message = objectMapper.writeValueAsString(paymentInfo);
+        templateForMessage.convertAndSend("paymentQueue",message);
     }
 }
