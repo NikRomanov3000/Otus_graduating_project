@@ -49,7 +49,8 @@ public class PaymentController {
             retId = paymentService.addPayment(payment).getId();
 
             PaymentInfo paymentInfo = new PaymentInfo(payment.getRefReceiptId(), payment.getAmount(), false);
-            sendPaymentInformationByREST(paymentInfo);
+            //sendPaymentInformationByREST(paymentInfo);
+            sendPaymentInformationByRabbitMQ(paymentInfo);
         } catch (Exception ex) {
             throw new Exception(ex);
         }
@@ -61,7 +62,8 @@ public class PaymentController {
         try {
             Payment payment = paymentService.getPaymentById(id).get();
             PaymentInfo paymentInfo = new PaymentInfo(payment.getRefReceiptId(), payment.getAmount(), true);
-            sendPaymentInformationByREST(paymentInfo);
+            //sendPaymentInformationByREST(paymentInfo);
+            sendPaymentInformationByRabbitMQ(paymentInfo);
 
             paymentService.removePaymentById(id);
         } catch (Exception ex) {

@@ -76,8 +76,8 @@
         </dependency>
 
         <dependency>
-            <groupId>ru.otus.models</groupId>
-            <artifactId>ru.otus.models</artifactId>
+            <groupId>models</groupId>
+            <artifactId>models</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
