@@ -11,7 +11,6 @@ import ru.romanov.otus.model.PaymentInfo;
 @EnableRabbit
 @Component
 public class RabbitMqListener {
-
     private final ReceiptService receiptService;
 
     public RabbitMqListener(ReceiptService receiptService) {
