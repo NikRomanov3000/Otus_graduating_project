@@ -3,7 +3,6 @@ package ru.romanov.otus.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.romanov.otus.model.Address;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +13,7 @@ import java.util.List;
 @Table(name = "person")
 public class Person implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @JsonProperty("id")
     private Long id;

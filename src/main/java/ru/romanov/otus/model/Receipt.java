@@ -2,7 +2,6 @@ package ru.romanov.otus.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.romanov.otus.model.Address;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 @Table(name = "receipt")
 public class Receipt {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
     @Column(name = "id")
     private long id;

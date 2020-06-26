@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Table(name="payment")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
     @Column(name = "id")
     private long id;
