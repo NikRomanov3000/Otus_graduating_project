@@ -45,4 +45,13 @@ public class PaymentInfo {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    @Override
+    public String toString() {
+        return "PaymentInfo{" +
+                "receiptId=" + receiptId +
+                ", amount=" + amount +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
 }

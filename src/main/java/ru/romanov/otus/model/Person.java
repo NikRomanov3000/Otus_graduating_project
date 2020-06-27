@@ -82,4 +82,14 @@ public class Person implements Serializable {
     public void addPersonAddress(Address personAddresses) {
         this.personAddresses.add(personAddresses);
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", personName='" + personName + '\'' +
+                ", passportSerial=" + passportSerial +
+                ", passportNumber=" + passportNumber +
+                '}';
+    }
 }

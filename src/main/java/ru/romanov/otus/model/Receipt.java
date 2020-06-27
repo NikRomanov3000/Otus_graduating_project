@@ -106,5 +106,16 @@ public class Receipt {
         this.refAddressId = refAddressId;
     }
 
+    @Override
+    public String toString() {
+        return "Receipt{" +
+                "id=" + id +
+                ", debtAmount=" + debtAmount +
+                ", dispatchDate=" + dispatchDate +
+                ", receiptStatus=" + receiptStatus +
+                ", activeAmount=" + activeAmount +
+                ", refAddressId=" + refAddressId +
+                '}';
+    }
 }
 

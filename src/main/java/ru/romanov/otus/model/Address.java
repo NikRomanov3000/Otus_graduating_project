@@ -68,6 +68,15 @@ public class Address{
     public List<Receipt> getReceiptsToAddress() { return receiptsToAddress; }
 
     public void setReceiptsToAddress(List<Receipt> receiptsToAddress) { this.receiptsToAddress = receiptsToAddress; }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", fullAddress='" + fullAddress + '\'' +
+                ", refPersonId=" + refPersonId +
+                '}';
+    }
 }
 
 

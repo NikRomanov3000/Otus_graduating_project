@@ -55,4 +55,14 @@ public class Payment {
     public Long getRefReceiptId() { return refReceiptId;}
 
     public void setRefReceiptId(Long refReceiptId) { this.refReceiptId = refReceiptId;}
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", paymentDate=" + paymentDate +
+                ", refReceiptId=" + refReceiptId +
+                '}';
+    }
 }
