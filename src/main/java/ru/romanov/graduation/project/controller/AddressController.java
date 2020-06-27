@@ -1,5 +1,7 @@
 package ru.romanov.graduation.project.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,9 +15,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class AddressController {
-
     private final AddressService addressService;
     private final PersonService personService;
+    private static final Logger logger = LoggerFactory.getLogger(AddressController.class);
 
     public AddressController(AddressService addressService, PersonService personService) {
         this.addressService = addressService;
@@ -24,11 +26,13 @@ public class AddressController {
 
     @GetMapping({"/address"})
     public List<Address> getAllAddress() {
+        logger.info("HTTP Query: GET /api/address");
         return addressService.getAllAddress();
     }
 
     @GetMapping({"/address/{addressId}"})
     public Optional<Address> getAddressById(@PathVariable(value = "addressId") Long id) {
+        logger.info("HTTP Query: GET /api/address/"+id);
         return addressService.getAddressById(id);
     }
 
@@ -43,17 +47,22 @@ public class AddressController {
                 retId = addressService.addAddress(address).getId();
             }
         } catch (Exception ex) {
+            logger.error(ex.getMessage());
             throw new Exception(ex);
         }
+
+        logger.info("HTTP Query: POST /api/address request body: " + address.toString() + " Address Id: " +retId);
         return retId;
     }
 
     @DeleteMapping({"/address/{addressId}"})
-    public boolean deleteAddressById(@PathVariable(value = "addressId") Long id) {
+    public boolean deleteAddressById(@PathVariable(value = "addressId") Long id) throws Exception {
+        logger.info("HTTP Query: DELETE /api/address/" + id);
         try {
             addressService.removeAddressById(id);
         } catch (Exception ex) {
-            return false;
+            logger.error(ex.getMessage());
+            throw new Exception(ex);
         }
         return true;
     }

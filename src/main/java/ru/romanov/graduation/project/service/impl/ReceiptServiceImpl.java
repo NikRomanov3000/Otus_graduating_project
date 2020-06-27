@@ -1,5 +1,7 @@
 package ru.romanov.graduation.project.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +19,8 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class ReceiptServiceImpl implements ReceiptService {
-
     private final ReceiptRepository receiptRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ReceiptServiceImpl.class);
 
     public ReceiptServiceImpl(ReceiptRepository receiptRepository) {
         this.receiptRepository = receiptRepository;
@@ -58,6 +60,7 @@ public class ReceiptServiceImpl implements ReceiptService {
                 receiptForUpdate = receiptOptional.get();
             }
         } catch (Exception ex){
+            logger.error(ex.getMessage());
             throw new Exception(ex);
         }
 
@@ -72,6 +75,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         }
 
         checkAndUpdateReceipt(receiptForUpdate);
+        logger.info("Receipt with id: " + receiptForUpdate.getId() + "was updated. New data: " + receiptForUpdate.toString());
         addReceipt(receiptForUpdate);
     }
 
