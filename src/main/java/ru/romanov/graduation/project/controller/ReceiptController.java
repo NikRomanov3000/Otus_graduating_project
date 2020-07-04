@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.romanov.graduation.project.model.Receipt;
 import ru.romanov.graduation.project.service.AddressService;
 import ru.romanov.graduation.project.service.ReceiptService;
 import ru.romanov.otus.model.PaymentInfo;
-import ru.romanov.otus.model.Receipt;
+
 
 import java.util.List;
 import java.util.Optional;

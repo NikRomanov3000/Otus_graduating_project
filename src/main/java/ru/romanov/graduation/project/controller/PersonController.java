@@ -3,8 +3,8 @@ package ru.romanov.graduation.project.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import ru.romanov.graduation.project.model.Person;
 import ru.romanov.graduation.project.service.PersonService;
-import ru.romanov.otus.model.Person;
 
 import java.util.List;
 import java.util.Optional;

@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.web.server.ResponseStatusException;
+import ru.romanov.graduation.project.model.Receipt;
+import ru.romanov.graduation.project.model.enums.ReceiptStatuses;
 import ru.romanov.graduation.project.repository.ReceiptRepository;
 import ru.romanov.graduation.project.service.ReceiptService;
 import ru.romanov.otus.model.PaymentInfo;
-import ru.romanov.otus.model.Receipt;
-import ru.romanov.otus.model.enums.ReceiptStatuses;
+
 
 import java.util.List;
 import java.util.Optional;
