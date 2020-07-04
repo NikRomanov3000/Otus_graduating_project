@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
+import project.model.Payment;
 import project.service.PaymentService;
-import ru.romanov.otus.model.Payment;
 import ru.romanov.otus.model.PaymentInfo;
 
 

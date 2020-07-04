@@ -2,9 +2,8 @@ package project.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.model.Payment;
 import project.repository.PaymentRepository;
-import ru.romanov.otus.model.Payment;
-
 
 import java.util.List;
 import java.util.Optional;
