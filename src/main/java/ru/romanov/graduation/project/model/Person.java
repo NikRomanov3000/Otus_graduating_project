@@ -3,7 +3,7 @@ package ru.romanov.graduation.project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.romanov.otus.model.Address;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
