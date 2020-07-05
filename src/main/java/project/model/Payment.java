@@ -12,7 +12,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "amount")
     @JsonProperty("amount")
@@ -30,11 +30,13 @@ public class Payment {
         paymentDate = LocalDate.now();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) { this.id = id;}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getAmount() {
         return amount;
@@ -52,9 +54,13 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public Long getRefReceiptId() { return refReceiptId;}
+    public Long getRefReceiptId() {
+        return refReceiptId;
+    }
 
-    public void setRefReceiptId(Long refReceiptId) { this.refReceiptId = refReceiptId;}
+    public void setRefReceiptId(Long refReceiptId) {
+        this.refReceiptId = refReceiptId;
+    }
 
     @Override
     public String toString() {

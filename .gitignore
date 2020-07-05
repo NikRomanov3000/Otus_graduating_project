@@ -9,7 +9,7 @@
 
 #Idea files
 *.iml
-../Otus_graduating_project/.idea
+.idea
 target
 
 # Mobile Tools for Java (J2ME)
