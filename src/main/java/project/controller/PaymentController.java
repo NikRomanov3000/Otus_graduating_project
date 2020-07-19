@@ -11,7 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import project.model.Payment;
 import project.service.PaymentService;
 import ru.romanov.otus.model.PaymentInfo;
@@ -25,13 +28,17 @@ import java.util.Optional;
 @RequestMapping("/api")
 @ComponentScan("ru.romanov")
 public class PaymentController {
+
     private final PaymentService paymentService;
     private final AmqpTemplate templateForMessage;
+
+
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     public PaymentController(PaymentService paymentService, AmqpTemplate templateForMessage) {
         this.paymentService = paymentService;
         this.templateForMessage = templateForMessage;
+
     }
 
     @GetMapping({"/payment"})
@@ -53,7 +60,8 @@ public class PaymentController {
             retId = paymentService.addPayment(payment).getId();
             PaymentInfo paymentInfo = new PaymentInfo(payment.getRefReceiptId(), payment.getAmount(), false);
             //sendPaymentInformationByREST(paymentInfo);
-            sendPaymentInformationByRabbitMQ(paymentInfo);
+            //sendPaymentInformationByRabbitMQ(paymentInfo);
+            sendPaymentInformationByRestTemplate(paymentInfo);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             throw new Exception(ex);
@@ -69,7 +77,8 @@ public class PaymentController {
             Payment payment = paymentService.getPaymentById(id).get();
             PaymentInfo paymentInfo = new PaymentInfo(payment.getRefReceiptId(), payment.getAmount(), true);
             //sendPaymentInformationByREST(paymentInfo);
-            sendPaymentInformationByRabbitMQ(paymentInfo);
+            //sendPaymentInformationByRabbitMQ(paymentInfo);
+            sendPaymentInformationByRestTemplate(paymentInfo);
 
             paymentService.removePaymentById(id);
         } catch (Exception ex) {
@@ -88,15 +97,26 @@ public class PaymentController {
         putRequestForUpdate.setHeader("Accept", "application/json");
         putRequestForUpdate.setHeader("Content-type", "application/json");
 
-        logger.info("Send payment information to: " + serviceUri +" payment information: " + paymentInfo.toString());
+        logger.info("Send payment information to: " + serviceUri + " payment information: " + paymentInfo.toString());
         CloseableHttpResponse response = httpclient.execute(putRequestForUpdate);
     }
 
     private void sendPaymentInformationByRabbitMQ(PaymentInfo paymentInfo) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String message = objectMapper.writeValueAsString(paymentInfo);
-        templateForMessage.convertAndSend("paymentQueue",message);
+        templateForMessage.convertAndSend("paymentQueue", message);
 
         logger.info("Send new message to RabbitMQ. Queue = paymentQueue. Message: " + message);
+    }
+
+    private void sendPaymentInformationByRestTemplate(PaymentInfo paymentInfo) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        StringBuilder serviceUri = new StringBuilder("http://localhost:8080/api/receipt/");
+        serviceUri.append(paymentInfo.getReceiptId());
+
+        HttpEntity<PaymentInfo> requestForUpdate = new HttpEntity<>(paymentInfo);
+        restTemplate.exchange(serviceUri.toString(), HttpMethod.PUT, requestForUpdate, Void.class);
+
+
     }
 }
